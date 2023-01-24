@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.exam_practice_1.view.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_clientFragment"
+            app:destination="@id/clientFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_storeFragment"
+            app:destination="@id/storeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allProductsFragment"
+        android:name="com.example.exam_practice_1.view.AllProductsFragment"
+        android:label="AllProductsFragment" />
+    <fragment
+        android:id="@+id/clientFragment"
+        android:name="com.example.exam_practice_1.view.ClientFragment"
+        android:label="ClientFragment" >
+        <action
+            android:id="@+id/action_clientFragment_to_buyFragment"
+            app:destination="@id/buyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/storeFragment"
+        android:name="com.example.exam_practice_1.view.StoreFragment"
+        android:label="StoreFragment" >
+        <action
+            android:id="@+id/action_storeFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/buyFragment"
+        android:name="com.example.exam_practice_1.view.BuyFragment"
+        android:label="BuyFragment" >
+        <argument
+            android:name="toBuyProdus"
+            app:argType="com.example.exam_practice_1.model.Produs" />
+        <action
+            android:id="@+id/action_buyFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+</navigation>
