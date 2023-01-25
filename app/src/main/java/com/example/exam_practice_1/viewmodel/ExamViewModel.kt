@@ -8,6 +8,7 @@ import com.example.exam_practice_1.logTag
 import com.example.exam_practice_1.model.Produs
 import com.example.exam_practice_1.model.ProdusAdd
 import com.example.exam_practice_1.model.ProdusBuy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.net.ConnectException
@@ -37,6 +38,25 @@ class ExamViewModel(
         get() = _isAllowed
 
 
+
+    fun getRepoProductsList() {
+        viewModelScope.launch(){
+            _produsList.value = repository.readData()
+            println("Value:" + _produsList.value?.toString())
+        }
+
+    }
+
+    fun repoAddProduct(produs: Produs) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.addProdus(produs)
+            } catch (e: Exception) {
+                println(e.toString())
+            }
+        }
+    }
+
     fun getProductsList() {
         viewModelScope.launch {
             try {
@@ -52,12 +72,12 @@ class ExamViewModel(
 //                if (!_recipeList.value.isNullOrEmpty()) {
 //                    offlineRepository.repopulateRecipeList(_recipeList.value!!)
 //                }
+//                repository.repopulateDB(_produsList.value!!)
                 logTag("productList_Value", networkService.getProduseList().toString())
             } catch (e: Exception) {
                 if (e is ConnectException) {
                     _isError.value = "Server unavailable"
                     _isOffline.value = true
-//                    _recipeList.value = offlineRepository.getAllRecipes()
                 } else {
                     _isError.value = e.toString()
                 }

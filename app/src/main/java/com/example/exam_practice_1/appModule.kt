@@ -1,17 +1,24 @@
 package com.example.exam_practice_1
 
+import android.content.Context
+import androidx.room.Room
+import com.example.exam_practice_1.model.ProdusDAO
+import com.example.exam_practice_1.model.ProdusDB
 import com.example.exam_practice_1.viewmodel.DatabaseHelper
 import com.example.exam_practice_1.viewmodel.ExamViewModel
 import com.example.exam_practice_1.viewmodel.NetworkService
 import com.example.exam_practice_1.viewmodel.Repository
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.scope.get
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+import kotlin.math.sin
 
 val service = module {
     single<OkHttpClient> { provideHttpClient() }
@@ -29,9 +36,17 @@ val repository = module {
 }
 
 val database = module {
-    single<DatabaseHelper> { DatabaseHelper(androidContext()) }
+    single<ProdusDB> {
+        db.getDatabase(androidApplication())
+    }
 }
 
+val produsDao = module {
+    single<ProdusDAO> {
+        val database = get<ProdusDB>()
+        database.produsDao()
+    }
+}
 
 
 private fun provideRetrofit(moshi: Moshi, client: OkHttpClient) = Retrofit.Builder()
@@ -49,6 +64,27 @@ private fun provideHttpClient(): OkHttpClient {
 
 private fun provideNetworkService(retrofit: Retrofit): NetworkService =
     retrofit.create(NetworkService::class.java)
+
+object db{
+    @Volatile
+    private var INSTANCE: ProdusDB? = null
+
+    fun getDatabase(context: Context): ProdusDB {
+        val tempInstance = INSTANCE
+        if (tempInstance != null) {
+            return tempInstance
+        }
+        synchronized(this) {
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                ProdusDB::class.java,
+                "products_database"
+            ).build()
+            INSTANCE = instance
+            return instance
+        }
+    }
+}
 
 
 private const val SERVER_URL = "http://10.0.2.2:2029/"

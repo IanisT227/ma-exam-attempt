@@ -37,6 +37,8 @@ class AllProductsFragment : Fragment(R.layout.all_products_fragment) {
 
     private fun initViews() {
         binding.toolbar.setNavigationOnClickListener {
+            feedViewModel.getRepoProductsList()
+            println("lalala" + feedViewModel.produsList.value)
             findNavController().navigateUp()
         }
 

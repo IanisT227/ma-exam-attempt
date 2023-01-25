@@ -8,11 +8,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.exam_practice_1.R
 import com.example.exam_practice_1.databinding.StoreFragmentBinding
 import com.example.exam_practice_1.logTag
+import com.example.exam_practice_1.model.Produs
 import com.example.exam_practice_1.model.ProdusAdd
 import com.example.exam_practice_1.viewmodel.ExamViewModel
 import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import kotlin.random.Random
 
 class StoreFragment : Fragment(R.layout.store_fragment) {
 
@@ -35,9 +37,17 @@ class StoreFragment : Fragment(R.layout.store_fragment) {
             val produs = getFieldValues()
             if (produs != null) {
                 storeViewModel.addProdus(produs)
-            }
-            else
-            {
+                storeViewModel.repoAddProduct(
+                    Produs(
+                        Random.nextInt(10),
+                        produs.nume,
+                        produs.descriere,
+                        produs.pret,
+                        produs.cantitate,
+                        produs.status
+                    )
+                )
+            } else {
                 Alerter.create(
                     requireActivity()
                 ).setTitle("Error").setText("Try Again")

@@ -11,6 +11,7 @@ class ExamApp : Application() {
             androidContext(this@ExamApp)
             modules(
                 listOf(
+                    produsDao,
                     database,
                     repository,
                     viewModel,
